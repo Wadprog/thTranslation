@@ -48,15 +48,20 @@ const SecondMacro = ({ selectedMacros, secondMacro, setSecondMacro }) => {
     var url =
       script_url +
       "?name=" +
-      formData.text  +
+      formData.text +
       "&id=" +
       formData.MacroId +
       "&action=update";
+    url =
+      "https://script.google.com/macros/s/AKfycbwiXqdCMBlUsibpS6nf0EaOHUFa3vtMdAL7wpY7nxJ28ROLrw4/exec?action=update";
+
+    const config = {
+      crossDomain: true,
+    };
+    const body = JSON.stringify({ ...formData });
 
     try {
-      const res = await axios.get(url, {
-        crossDomain: true,
-      });
+      const res = await axios.post(url, body, config);
       console.log(res);
     } catch (error) {
       console.log(error);
