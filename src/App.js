@@ -5,18 +5,19 @@ import { Row, Col } from "react-bootstrap";
 import MacroSelector from "./Components/MacroSelector";
 import MainMacro from "./Components/MainMacro";
 import SecondMacro from "./Components/SecondMacro";
+import Loading from "./Components/Loading";
 import helper from "./helpers/helper";
 
 function App() {
   const [macros, setMacros] = useState([]);
   const [selectedMacros, setSelectedMacros] = useState([]);
-
   const [engVer, setEngVer] = useState({});
   const [secondMacro, setSecondMacro] = useState([]);
 
+  /**Loading  */
+  const [isloading, setIsloading] = useState(false);
   const handleChangeLanguage = ({ target: { value } }) => {
     const mainValue = helper.removeLanguageInitials(value);
-
     const selectedLanguage = macros.filter(
       language => language.Name.indexOf(mainValue) > -1
     );
@@ -36,29 +37,34 @@ function App() {
 
   return (
     <div className='App p-5'>
-      <div>
-        <h1> Macro Translator</h1>
-        <h2>Choose Macro Below </h2>
+      {isloading ? (
+        <Loading />
+      ) : (
+        <div>
+          <h1> Macro Translator</h1>
+          <h2>Choose Macro Below </h2>
 
-        <MacroSelector
-          setMacros={setMacros}
-          setSelectedMacros={setSelectedMacros}
-          macros={macros}
-          handleChangeLanguage={handleChangeLanguage}
-        />
-        <Row>
-          <Col>
-            <MainMacro engVer={engVer} />
-          </Col>
-          <Col>
-            <SecondMacro
-              selectedMacros={selectedMacros}
-              secondMacro={secondMacro}
-              setSecondMacro={setSecondMacro}
-            />
-          </Col>
-        </Row>
-      </div>
+          <MacroSelector
+            setMacros={setMacros}
+            setSelectedMacros={setSelectedMacros}
+            macros={macros}
+            handleChangeLanguage={handleChangeLanguage}
+            setIsloading= {setIsloading}
+          />
+          <Row>
+            <Col>
+              <MainMacro engVer={engVer} />
+            </Col>
+            <Col>
+              <SecondMacro
+                selectedMacros={selectedMacros}
+                secondMacro={secondMacro}
+                setSecondMacro={setSecondMacro}
+              />
+            </Col>
+          </Row>
+        </div>
+      )}
     </div>
   );
 }

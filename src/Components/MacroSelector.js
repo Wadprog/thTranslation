@@ -8,6 +8,7 @@ const MacroSelector = ({
   setSelectedMacros,
   macros,
   handleChangeLanguage,
+  setIsloading,
 }) => {
   let loading = true;
   useEffect(() => {
@@ -18,13 +19,12 @@ const MacroSelector = ({
         console.log(res.data.records);
         setMacros(res.data.records);
         setSelectedMacros(res.data.records[0]);
-
-        loading = false;
       } catch (error) {
         console.log(error);
       }
     };
     test();
+
     return () => {
       console.log("done for now");
     };
