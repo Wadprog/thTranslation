@@ -24,29 +24,30 @@ const MacroSelector = ({
       }
     };
     test();
+    setIsloading(false)
 
     return () => {
       console.log("done for now");
     };
-  }, []);
+  }, [setIsloading]);
 
   return (
     <>
-      {loading ? (
+      
         <Form>
           <Form.Control as='select' onChange={handleChangeLanguage}>
             <option disabled selected>
               Select a Macro
             </option>
             {macros.length > 0 &&
-              macros.map(macro => (
-                <option value={macro.Name}>{macro.Name}</option>
+            macros.filter(macro=> macro.Name.includes("EN:")).map(macro => (
+                <option value={macro.Name}>{
+                  macro.Name.charAt(2)==':'?macro.Name.substring(3):macro.Name
+                  }</option>
               ))}
           </Form.Control>
         </Form>
-      ) : (
-        <Spinner animation='border' />
-      )}
+     
     </>
   );
 };

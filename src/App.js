@@ -60,6 +60,7 @@ function App() {
                 selectedMacros={selectedMacros}
                 secondMacro={secondMacro}
                 setSecondMacro={setSecondMacro}
+                engVer={engVer} 
               />
             </Col>
           </Row>

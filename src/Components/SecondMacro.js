@@ -6,7 +6,8 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { Row, Col, Button } from "react-bootstrap";
 import script_url from "../helpers/baseUrl";
 import axios from "axios";
-const SecondMacro = ({ selectedMacros, secondMacro, setSecondMacro }) => {
+const SecondMacro = ({ selectedMacros, secondMacro, setSecondMacro , engVer}) => {
+  var selectedLang="";
   const [languagesInitials, setLanguagesInitials] = useState([
     "EN:",
     "FR:",
@@ -14,7 +15,11 @@ const SecondMacro = ({ selectedMacros, secondMacro, setSecondMacro }) => {
     "ES:",
     "PT:",
   ]);
+  const [actualLang, setActuaLang]= useState("");
+
   const handleLanguageTotransalate = ({ target: { value } }) => {
+    setActuaLang(value);
+    console.log({value})
     const secondMacroInCorrectLanguage = helper.filterMacrosBylanguage(
       value,
       selectedMacros
@@ -24,6 +29,7 @@ const SecondMacro = ({ selectedMacros, secondMacro, setSecondMacro }) => {
     else {
       const error = {
         Name: `No ${value} version`,
+        error:true
       };
       error.Email_Reply = `No ${value} version found for the selected macro`;
       setSecondMacro(error);
@@ -70,6 +76,13 @@ const SecondMacro = ({ selectedMacros, secondMacro, setSecondMacro }) => {
     console.log(formData);
   };
 
+  const handleCreateNewMacro= ()=> {
+    var title= actualLang; 
+    title+= engVer.Name.charAt(2)===':'? engVer.Name.substring(3):engVer.Name;
+    setFormdata({...formData, title:title })
+    console.log(formData)
+  }
+
   return (
     <>
       <h3>Choose a Language</h3>
@@ -87,20 +100,22 @@ const SecondMacro = ({ selectedMacros, secondMacro, setSecondMacro }) => {
           </Col>
           <Col>
             {formData.text != "" && (
-              <input
+              <>
+              {!secondMacro.error&&<input
                 className=' btn btn-success'
                 type='submit'
                 size='sm'
                 variant='success'
                 value='Save Changes'
-              />
+              />}
+              </>
             )}
           </Col>
           <Col>{1 === 2 && <Button>Create Macro </Button>}</Col>
         </Row>
       </Form>
       <article>
-        <p>{secondMacro.Name}</p>
+        {secondMacro.error?<Button onClick={handleCreateNewMacro}> Create missing macro</Button >:<p>{secondMacro.Name}</p>}
         <CKEditor
           editor={ClassicEditor}
           data={secondMacro.Email_Reply}
