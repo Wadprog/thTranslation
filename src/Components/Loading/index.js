@@ -1,14 +1,17 @@
 import React from "react";
-import { Spinner } from "react-bootstrap";
-
-const index = () => {
+import { Modal, Spinner } from "react-bootstrap";
+const LoadingModal = ({ show }) => {
   return (
-    <div className='d-flex justify-content-center'>
-      <div>
-        <Spinner animation='border' size='sm' />
-      </div>
-    </div>
+    <Modal show={show} animation={true} size="xl">
+      <Modal.Body>
+        <div className='d-flex justify-content-center'>
+          <div>
+            <Spinner animation='border' size='sm' />
+          </div>
+        </div>
+      </Modal.Body>
+    </Modal>
   );
 };
 
-export default index;
+export default LoadingModal;

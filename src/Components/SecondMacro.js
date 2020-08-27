@@ -1,25 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import helper from ".././helpers/helper";
+import languagesInitials from "../helpers/languagesInit";
 import CKEditor from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { Row, Col, Button } from "react-bootstrap";
 import script_url from "../helpers/baseUrl";
 import axios from "axios";
-const SecondMacro = ({ selectedMacros, secondMacro, setSecondMacro , engVer}) => {
-  var selectedLang="";
-  const [languagesInitials, setLanguagesInitials] = useState([
-    "EN:",
-    "FR:",
-    "DE:",
-    "ES:",
-    "PT:",
-  ]);
-  const [actualLang, setActuaLang]= useState("");
+
+const SecondMacro = ({
+  selectedMacros,
+  secondMacro,
+  setSecondMacro,
+  engVer,
+  isloading,
+  setIsloading,
+  setSuccess,
+  success,
+}) => {
+  useEffect(() => {
+    if (selectedMacros.length > 0) {
+      var e = {};
+      e.target = { value: "EN:" };
+      handleLanguageTotransalate(e);
+    }
+  }, [selectedMacros]);
+  useEffect(() => {
+    if (success.show)
+      var timeout = setTimeout(() => {
+        setSuccess({ ...success, show: false });
+        clearTimeout(timeout);
+      }, 700);
+  }, [success.show]);
+  const [actualLang, setActuaLang] = useState("");
 
   const handleLanguageTotransalate = ({ target: { value } }) => {
     setActuaLang(value);
-    console.log({value})
+    console.log({ value });
     const secondMacroInCorrectLanguage = helper.filterMacrosBylanguage(
       value,
       selectedMacros
@@ -29,7 +46,7 @@ const SecondMacro = ({ selectedMacros, secondMacro, setSecondMacro , engVer}) =>
     else {
       const error = {
         Name: `No ${value} version`,
-        error:true
+        error: true,
       };
       error.Email_Reply = `No ${value} version found for the selected macro`;
       setSecondMacro(error);
@@ -50,17 +67,9 @@ const SecondMacro = ({ selectedMacros, secondMacro, setSecondMacro , engVer}) =>
 
   const handleSumbmit = async e => {
     e.preventDefault();
+    setIsloading(true);
 
-    var url =
-      script_url +
-      "?name=" +
-      formData.text +
-      "&id=" +
-      formData.MacroId +
-      "&action=update";
-    url =
-      "https://script.google.com/macros/s/AKfycbwiXqdCMBlUsibpS6nf0EaOHUFa3vtMdAL7wpY7nxJ28ROLrw4/exec?action=update";
-
+    var url = script_url + "?action=update";
     const config = {
       crossDomain: true,
     };
@@ -68,20 +77,21 @@ const SecondMacro = ({ selectedMacros, secondMacro, setSecondMacro , engVer}) =>
 
     try {
       const res = await axios.post(url, body, config);
-      console.log(res);
+      setSuccess({ ...success, show: true });
     } catch (error) {
-      console.log(error);
+      console.log({ error });
     }
 
-    console.log(formData);
+    setIsloading(false);
   };
 
-  const handleCreateNewMacro= ()=> {
-    var title= actualLang; 
-    title+= engVer.Name.charAt(2)===':'? engVer.Name.substring(3):engVer.Name;
-    setFormdata({...formData, title:title })
-    console.log(formData)
-  }
+  const handleCreateNewMacro = () => {
+    var title = actualLang;
+    title +=
+      engVer.Name.charAt(2) === ":" ? engVer.Name.substring(3) : engVer.Name;
+    setFormdata({ ...formData, title: title });
+    console.log(formData);
+  };
 
   return (
     <>
@@ -89,25 +99,32 @@ const SecondMacro = ({ selectedMacros, secondMacro, setSecondMacro , engVer}) =>
       <Form onSubmit={handleSumbmit}>
         <Row>
           <Col>
-            <Form.Control as='select' onChange={handleLanguageTotransalate}>
+            <Form.Control
+              as='select'
+              value={actualLang}
+              onChange={handleLanguageTotransalate}
+            >
               <option disabled selected>
                 Select a Language
               </option>
-              {languagesInitials.map(lang => (
-                <option value={lang}>{lang}</option>
-              ))}
+              {selectedMacros.length > 0 &&
+                languagesInitials.map(lang => (
+                  <option value={lang}>{lang}</option>
+                ))}
             </Form.Control>
           </Col>
           <Col>
             {formData.text != "" && (
               <>
-              {!secondMacro.error&&<input
-                className=' btn btn-success'
-                type='submit'
-                size='sm'
-                variant='success'
-                value='Save Changes'
-              />}
+                {!secondMacro.error && (
+                  <input
+                    className=' btn btn-success'
+                    type='submit'
+                    size='sm'
+                    variant='success'
+                    value='Save Changes'
+                  />
+                )}
               </>
             )}
           </Col>
@@ -115,13 +132,18 @@ const SecondMacro = ({ selectedMacros, secondMacro, setSecondMacro , engVer}) =>
         </Row>
       </Form>
       <article>
-        {secondMacro.error?<Button onClick={handleCreateNewMacro}> Create missing macro</Button >:<p>{secondMacro.Name}</p>}
+        {secondMacro.error ? (
+          <Button onClick={handleCreateNewMacro}> Create missing macro</Button>
+        ) : (
+          <p>{secondMacro.Name}</p>
+        )}
         <CKEditor
           editor={ClassicEditor}
           data={secondMacro.Email_Reply}
+          disabled={isloading || secondMacro.error}
           onInit={editor => {
             // You can store the "editor" and use when it is needed.
-            console.log("Editor is ready to use!", editor);
+            //console.log("Editor is ready to use!", editor);
           }}
           onChange={(event, editor) => {
             const data = editor.getData();
@@ -133,10 +155,10 @@ const SecondMacro = ({ selectedMacros, secondMacro, setSecondMacro , engVer}) =>
             });
           }}
           onBlur={(event, editor) => {
-            console.log("Blur.", editor);
+            //console.log("Blur.", editor);
           }}
           onFocus={(event, editor) => {
-            console.log("Focus.", editor);
+            //console.log("Focus.", editor);
           }}
         />
       </article>

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import script_url from "../helpers/baseUrl";
-import { Form, Spinner } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 
 const MacroSelector = ({
   setMacros,
@@ -9,8 +9,8 @@ const MacroSelector = ({
   macros,
   handleChangeLanguage,
   setIsloading,
+  isloading,
 }) => {
-  let loading = true;
   useEffect(() => {
     const test = async () => {
       try {
@@ -22,32 +22,38 @@ const MacroSelector = ({
       } catch (error) {
         console.log(error);
       }
+      if (isloading) setIsloading(false);
     };
     test();
-    setIsloading(false)
 
     return () => {
       console.log("done for now");
     };
-  }, [setIsloading]);
+  }, []);
 
   return (
     <>
-      
-        <Form>
-          <Form.Control as='select' onChange={handleChangeLanguage}>
-            <option disabled selected>
-              Select a Macro
-            </option>
-            {macros.length > 0 &&
-            macros.filter(macro=> macro.Name.includes("EN:")).map(macro => (
-                <option value={macro.Name}>{
-                  macro.Name.charAt(2)==':'?macro.Name.substring(3):macro.Name
-                  }</option>
+      <Form>
+        <Form.Control
+          as='select'
+          onChange={handleChangeLanguage}
+          disabled={isloading}
+        >
+          <option disabled selected>
+            Select a Macro
+          </option>
+          {macros.length > 0 &&
+            macros
+              .filter(macro => macro.Name.includes("EN:"))
+              .map(macro => (
+                <option value={macro.Name}>
+                  {macro.Name.charAt(2) == ":"
+                    ? macro.Name.substring(3)
+                    : macro.Name}
+                </option>
               ))}
-          </Form.Control>
-        </Form>
-     
+        </Form.Control>
+      </Form>
     </>
   );
 };
