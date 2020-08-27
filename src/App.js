@@ -4,12 +4,7 @@ import { Switch, Route } from "react-router-dom";
 import HomePage from "./Page/Home";
 import Spreasheets from "./Page/Spreasheets";
 function App() {
-  return (
-    <Switch>
-      <Route exact path='/' component={HomePage} />
-      <Route exact path='/spreadsheets' component={Spreasheets} />
-    </Switch>
-  );
+  return <HomePage />;
 }
 
 export default App;

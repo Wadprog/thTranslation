@@ -10,5 +10,5 @@ script_url =
 script_url =
   "https://script.google.com/macros/s/AKfycbwiXqdCMBlUsibpS6nf0EaOHUFa3vtMdAL7wpY7nxJ28ROLrw4/exec";
 script_url =
-  "https://script.google.com/macros/s/AKfycbwiXqdCMBlUsibpS6nf0EaOHUFa3vtMdAL7wpY7nxJ28ROLrw4/exec";
+  "https://script.google.com/a/tophatter.com/macros/s/AKfycbwdPeFdq0pz3Sz5ecUE4JsoIKm_VHX-9UnEZdn8e96zjA_bCsxZ/exec";
 export default script_url;
