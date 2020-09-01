@@ -17,6 +17,8 @@ const SecondMacro = ({
   setIsloading,
   setSuccess,
   success,
+  setCreatingNewMacro,
+  setNewMacroTitle,
 }) => {
   const [actualLang, setActuaLang] = useState("");
   useEffect(() => {
@@ -93,11 +95,13 @@ const SecondMacro = ({
       engVer.Name.charAt(2) === ":" ? engVer.Name.substring(3) : engVer.Name;
     setFormdata({ ...formData, title: title });
     console.log(formData);
+    setNewMacroTitle(title);
+    setCreatingNewMacro(true);
   };
 
   return (
     <>
-      <h3>Choose a Language</h3>
+      <h3>Change selected Language</h3>
       <Form onSubmit={handleSumbmit}>
         <Row>
           <Col>
@@ -135,35 +139,48 @@ const SecondMacro = ({
       </Form>
       <article>
         {secondMacro.error ? (
-          <p>Macro not available </p>
+          <>
+            <p className='my-3'>
+              {" "}
+              This Macro is'nt available in the selected language click{" "}
+              <a className='text-primary' onClick={handleCreateNewMacro}>
+                here
+              </a>{" "}
+              to create it
+            </p>
+          </>
         ) : (
           //<Button onClick={handleCreateNewMacro}> Create missing macro</Button>
           <p>{secondMacro.Name}</p>
         )}
-        <CKEditor
-          editor={ClassicEditor}
-          data={secondMacro.Email_Reply}
-          disabled={isloading || secondMacro.error}
-          onInit={editor => {
-            // You can store the "editor" and use when it is needed.
-            //console.log("Editor is ready to use!", editor);
-          }}
-          onChange={(event, editor) => {
-            const data = editor.getData();
-            setFormdata({
-              ...formData,
-              text: data,
-              title: secondMacro.Name,
-              MacroId: secondMacro.Name,
-            });
-          }}
-          onBlur={(event, editor) => {
-            //console.log("Blur.", editor);
-          }}
-          onFocus={(event, editor) => {
-            //console.log("Focus.", editor);
-          }}
-        />
+        {!secondMacro.error ? (
+          <CKEditor
+            editor={ClassicEditor}
+            data={secondMacro.Email_Reply}
+            disabled={isloading || secondMacro.error}
+            onInit={editor => {
+              // You can store the "editor" and use when it is needed.
+              //console.log("Editor is ready to use!", editor);
+            }}
+            onChange={(event, editor) => {
+              const data = editor.getData();
+              setFormdata({
+                ...formData,
+                text: data,
+                title: secondMacro.Name,
+                MacroId: secondMacro.Name,
+              });
+            }}
+            onBlur={(event, editor) => {
+              //console.log("Blur.", editor);
+            }}
+            onFocus={(event, editor) => {
+              //console.log("Focus.", editor);
+            }}
+          />
+        ) : (
+          <p>{secondMacro.Email_Reply}</p>
+        )}
       </article>
     </>
   );

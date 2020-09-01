@@ -7,6 +7,7 @@ import MainMacro from "../Components/MainMacro";
 import SecondMacro from "../Components/SecondMacro";
 import Loading from "../Components/Loading";
 import StatusAlert from "../Components/StatusAlert";
+import CreateNewMacro from "../Components/CreateNewMacro";
 /** Importing helper Function */
 import helper from "../helpers/helper";
 import { Link } from "react-router-dom";
@@ -22,6 +23,11 @@ const Home = () => {
     show: false,
     good: true,
   });
+
+  // Handle Show/Hide for the modal To create new Macro
+  const [creatingNewMacro, setCreatingNewMacro] = useState(false);
+  // Handle Title for the new Macro
+  const [newMacroTitle, setNewMacroTitle] = useState("");
 
   const handleChangeLanguage = ({ target: { value } }) => {
     setSelectedMacros([]);
@@ -63,21 +69,39 @@ const Home = () => {
               <MainMacro engVer={engVer} />
             </Col>
             <Col>
-              <SecondMacro
-                selectedMacros={selectedMacros}
-                secondMacro={secondMacro}
-                setSecondMacro={setSecondMacro}
-                engVer={engVer}
-                isloading={isloading}
-                setIsloading={setIsloading}
-                setSuccess={setSuccess}
-                success={success}
-              />
+              {!creatingNewMacro ? (
+                <SecondMacro
+                  selectedMacros={selectedMacros}
+                  secondMacro={secondMacro}
+                  setSecondMacro={setSecondMacro}
+                  engVer={engVer}
+                  isloading={isloading}
+                  setIsloading={setIsloading}
+                  setSuccess={setSuccess}
+                  success={success}
+                  setCreatingNewMacro={setCreatingNewMacro}
+                  setNewMacroTitle={setNewMacroTitle}
+                />
+              ) : (
+                <CreateNewMacro
+                  title={newMacroTitle}
+                  isloading={isloading}
+                  setIsloading={setIsloading}
+                  setSuccess={setSuccess}
+                  success={success}
+                  handleClose={() => setCreatingNewMacro(false)}
+                />
+              )}
             </Col>
           </Row>
         </div>
         <Loading show={isloading} />
         <StatusAlert {...success} />
+        {/* {<CreateNewMacro
+          title={newMacroTitle}
+          show={creatingNewMacro}
+          handleClose={() => setCreatingNewMacro(false)}
+        />} */}
       </div>
     </>
   );
