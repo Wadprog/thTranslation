@@ -18,10 +18,12 @@ const SecondMacro = ({
   setSuccess,
   success,
 }) => {
+  const [actualLang, setActuaLang] = useState("");
   useEffect(() => {
     if (selectedMacros.length > 0) {
       var e = {};
       e.target = { value: "EN:" };
+      e.target.value = actualLang == "" ? "EN:" : actualLang;
       handleLanguageTotransalate(e);
     }
   }, [selectedMacros]);
@@ -32,7 +34,7 @@ const SecondMacro = ({
         clearTimeout(timeout);
       }, 700);
   }, [success.show]);
-  const [actualLang, setActuaLang] = useState("");
+  //const [actualLang, setActuaLang] = useState("");
 
   const handleLanguageTotransalate = ({ target: { value } }) => {
     setActuaLang(value);
@@ -133,8 +135,9 @@ const SecondMacro = ({
       </Form>
       <article>
         {secondMacro.error ? (
-          <Button onClick={handleCreateNewMacro}> Create missing macro</Button>
+          <p>Macro not available </p>
         ) : (
+          //<Button onClick={handleCreateNewMacro}> Create missing macro</Button>
           <p>{secondMacro.Name}</p>
         )}
         <CKEditor
