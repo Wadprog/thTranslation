@@ -26,6 +26,10 @@ const SecondMacro = ({
       var e = {};
       e.target = { value: "EN:" };
       e.target.value = actualLang == "" ? "EN:" : actualLang;
+      //let us check to see if there is anything on localStorage
+      var previousLanguage = localStorage.getItem("selectedLanguage");
+      e.target.value =
+        previousLanguage !== null ? previousLanguage : e.target.value;
       handleLanguageTotransalate(e);
     }
   }, [selectedMacros]);
@@ -34,7 +38,7 @@ const SecondMacro = ({
       var timeout = setTimeout(() => {
         setSuccess({ ...success, show: false });
         clearTimeout(timeout);
-      }, 700);
+      }, 450);
   }, [success.show]);
   //const [actualLang, setActuaLang] = useState("");
 
@@ -96,6 +100,7 @@ const SecondMacro = ({
     setFormdata({ ...formData, title: title });
     console.log(formData);
     setNewMacroTitle(title);
+    localStorage.setItem("selectedLanguage", actualLang);
     setCreatingNewMacro(true);
   };
 
@@ -130,7 +135,7 @@ const SecondMacro = ({
                     variant='success'
                     value='Save Changes'
                   >
-                     Save changes
+                    Save changes
                   </Button>
                 )}
               </>
@@ -145,9 +150,11 @@ const SecondMacro = ({
             <p className='my-3'>
               {" "}
               This Macro is'nt available in the selected language click{" "}
-              <a className='text-primary' onClick={handleCreateNewMacro}>
-                here
-              </a>{" "}
+              <b>
+                <a className='text-primary' onClick={handleCreateNewMacro}>
+                  here
+                </a>{" "}
+              </b>
               to create it
             </p>
           </>
