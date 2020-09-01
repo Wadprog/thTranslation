@@ -123,13 +123,15 @@ const SecondMacro = ({
             {formData.text != "" && (
               <>
                 {!secondMacro.error && (
-                  <input
+                  <Button
                     className=' btn btn-success'
                     type='submit'
                     size='sm'
                     variant='success'
                     value='Save Changes'
-                  />
+                  >
+                     Save changes
+                  </Button>
                 )}
               </>
             )}

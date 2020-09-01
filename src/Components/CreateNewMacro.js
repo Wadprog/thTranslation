@@ -49,12 +49,8 @@ const CreateNewMacro = ({
       <div className='d-flex justify-content-between my-2'>
         <h4>Creating {title} Macro</h4>
         <aside>
-          <Button
-            className='mr-2'
-            variant='outline-primary'
-            onClick={handleSubmit}
-          >
-            <i className=' fa fa-floppy-o'></i>
+          <Button className='mr-2' variant='success' onClick={handleSubmit}>
+            Save Macro
           </Button>
           <Button variant='outline-secondary' onClick={handleClose}>
             <i className=' fa fa-times'></i>
