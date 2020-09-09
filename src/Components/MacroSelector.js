@@ -16,11 +16,11 @@ const MacroSelector = ({
       try {
         var url = script_url + "?action=read";
         const res = await axios.get(url);
-        console.log(res.data.records);
+        //console.log(res.data.records);
         setMacros(res.data.records);
         setSelectedMacros(res.data.records[0]);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
       if (isloading) setIsloading(false);
     };
@@ -46,7 +46,7 @@ const MacroSelector = ({
             macros
               .filter(macro => macro.Name.includes("EN:"))
               .map(macro => (
-                <option value={macro.Name}>
+                <option value={macro.Name} key={macro.Name}>
                   {macro.Name.charAt(2) == ":"
                     ? macro.Name.substring(3)
                     : macro.Name}

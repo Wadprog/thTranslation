@@ -2,10 +2,11 @@ const helper = {};
 const languagesInitials = ["EN:", "FR:", "DE:", "ES:", "PT:"];
 
 helper.filterMacrosBylanguage = (lang, MacrosArray) => {
+  //The MacrosArray contain all the Macro in all the language with the same title 
   const [correctMacro] = MacrosArray.filter(
     macro => macro.Name.indexOf(lang) > -1
   );
-  console.log({ correctMacro });
+  //console.log({ correctMacro });
   if (typeof correctMacro === "object" && correctMacro != undefined)
     return correctMacro;
   else {

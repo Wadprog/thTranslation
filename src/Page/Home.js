@@ -28,12 +28,14 @@ const Home = () => {
   const [creatingNewMacro, setCreatingNewMacro] = useState(false);
   // Handle Title for the new Macro
   const [newMacroTitle, setNewMacroTitle] = useState("");
-
+  //Should be handle change Macro
   const handleChangeLanguage = ({ target: { value } }) => {
     setSelectedMacros([]);
     const mainValue = helper.removeLanguageInitials(value);
+    //Should be called selected Macros
     const selectedLanguage = macros.filter(
-      language => language.Name.indexOf(mainValue) > -1
+      macro =>
+        macro.Name.toLowerCase().indexOf(mainValue.toLowerCase()) > -1
     );
     const engVersion = helper.filterMacrosBylanguage("EN:", selectedLanguage);
 

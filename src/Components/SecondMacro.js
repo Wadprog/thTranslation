@@ -36,7 +36,7 @@ const SecondMacro = ({
   useEffect(() => {
     if (success.show)
       var timeout = setTimeout(() => {
-        setSuccess({ ...success, show: false });
+        setSuccess({ ...success, good: true, show: false });
         clearTimeout(timeout);
       }, 450);
   }, [success.show]);
@@ -44,7 +44,7 @@ const SecondMacro = ({
 
   const handleLanguageTotransalate = ({ target: { value } }) => {
     setActuaLang(value);
-    console.log({ value });
+    //console.log({ value });
     const secondMacroInCorrectLanguage = helper.filterMacrosBylanguage(
       value,
       selectedMacros
@@ -85,9 +85,11 @@ const SecondMacro = ({
 
     try {
       const res = await axios.post(url, body, config);
-      setSuccess({ ...success, show: true });
+      setSuccess({ ...success, good: true, show: true });
+      window.location.reload();
     } catch (error) {
-      console.log({ error });
+      console.error({ error });
+      setSuccess({ ...success, good: false, show: true });
     }
 
     setIsloading(false);
@@ -98,7 +100,7 @@ const SecondMacro = ({
     title +=
       engVer.Name.charAt(2) === ":" ? engVer.Name.substring(3) : engVer.Name;
     setFormdata({ ...formData, title: title });
-    console.log(formData);
+    //console.log(formData);
     setNewMacroTitle(title);
     localStorage.setItem("selectedLanguage", actualLang);
     setCreatingNewMacro(true);
@@ -120,7 +122,7 @@ const SecondMacro = ({
               </option>
               {selectedMacros.length > 0 &&
                 languagesInitials.map(lang => (
-                  <option value={lang}>{lang}</option>
+                  <option value={lang} key={lang}>{lang}</option>
                 ))}
             </Form.Control>
           </Col>
